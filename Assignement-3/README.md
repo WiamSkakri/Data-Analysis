@@ -1,5 +1,5 @@
 # Assignment 3 — Measuring Associations and Statistical Significance
-**Course:** CSDS 313/413 – Introduction to Data Analysis  
+**Course:** CSDS 413 – Introduction to Data Analysis  
 **Instructor:** Dr. Mehmet Koyutürk  
 **Semester:** Fall 2025  
 
@@ -59,16 +59,4 @@ Students will combine computational experimentation with statistical reasoning t
 - Correct for multiple hypothesis testing to avoid false discoveries.  
 - Visualize and critically interpret statistical relationships in data.  
 
----
 
-## References
-- CSDS 313/413 Lecture Notes – *Sampling and Generating Distributions*, *Statistical Inference*, and *Pairwise Association*.  
-- Zaki & Meira (2020), *Data Mining and Analysis: Fundamental Concepts and Algorithms*.  
-- Supplementary materials on Hoeffding’s Inequality and Permutation Testing.
-
----
-
-**Submission:** Upload the LaTeX report and code archive to Canvas by the specified deadline.  
-**Collaboration Policy:** Team size ≤ 2 students; discussions encouraged, but each submission must reflect original work.
-
----
