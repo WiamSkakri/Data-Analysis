@@ -1,0 +1,48 @@
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{psfrag}
+\usepackage{amsthm}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{ifthen}
+\usepackage{algorithm}
+\usepackage{hyperref}
+
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\newtheorem*{definition*}{Definition}
+\newtheorem*{example*}{Example}
+
+%\pagestyle{empty}
+
+\newcommand{\newfontobj}[2]{
+  \newcommand{#1}[1]{
+    \expandafter\def\csname##1\endcsname{{#2 ##1}}}}
+
+\newfontobj{\class}{\sf} % Typeset Classes in sans serif font
+
+
+
+\newcommand{\falltwofive}[4][]{
+\ifthenelse { \equal {#1} {} }  %if due date is not specified,
+{ \def\duedate {} }   % set \duedate as blank
+{ \def\duedate {{\bf{Due:}} #1, before 11:59 PM} } % else (not blank)
+\noindent
+\fbox{
+\begin{minipage}{6.3in}
+  {\bf CSDS 313/413: Introduction to Data Analysis} \hfill #3
+  \begin{center}
+    {\Large {\sc Homework #2: #4}} \\[3mm]
+  \end{center}
+	\copyright Vo Linh Chi Dao, Mehmet Koyut\"urk,  Khoa Tran, Rui Yang, Crystal Zhu @ CWRU   \hfill %\duedate
+\end{minipage}
+}
+
+\bigskip
+%{\Large{\duedate}} 
+%\\
+%\bigskip
+}
