@@ -1,0 +1,247 @@
+\documentclass[11pt]{article}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{float}
+
+\title{CSDS 313/413: Introduction to Data Analysis \\ Homework 3: Pairwise Association \\ Solutions}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Task 1: Association Between Genomic Variants}
+
+\subsection{Part (a): Two Variables from p1a.csv}
+
+\subsubsection{Test Statistics and P-values}
+
+\paragraph{Mutual Information (MI)}
+\begin{itemize}
+    \item Observed MI value: 
+    \item Number of permutations (N): 
+    \item P-value: 
+    \item Selected significance level ($\alpha$): 
+    \item Conclusion: 
+\end{itemize}
+
+\paragraph{Jaccard Index (JI)}
+\begin{itemize}
+    \item Observed JI value: 
+    \item Number of permutations (N): 
+    \item P-value: 
+    \item Selected significance level ($\alpha$): 
+    \item Conclusion: 
+\end{itemize}
+
+\paragraph{Pearson's Chi-squared ($\chi^2$)}
+\begin{itemize}
+    \item Observed $\chi^2$ value: 
+    \item Degrees of freedom: 
+    \item P-value: 
+    \item Selected significance level ($\alpha$): 
+    \item Conclusion: 
+\end{itemize}
+
+\subsubsection{Analysis and Interpretation}
+
+\paragraph{Statistical Significance:}
+
+\paragraph{Strength of Association:}
+
+\paragraph{Agreement Between Statistics:}
+
+\paragraph{Explanation of Any Discrepancies:}
+
+\subsubsection{Visualization}
+% Include permutation test visualization here
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{figures/task1a_permutation.png}
+%     \caption{Permutation test results for Task 1(a)}
+%     \label{fig:task1a}
+% \end{figure}
+
+\subsection{Part (b): 105 Variable Pairs from p1b.csv}
+
+\subsubsection{Test Statistics and P-values}
+
+\paragraph{Number of Permutations (N):}
+
+\paragraph{Selected Significance Level ($\alpha$):}
+
+\paragraph{Multiple Hypothesis Correction Method:}
+
+\subsubsection{Results Summary}
+
+\paragraph{Mutual Information (MI)}
+\begin{itemize}
+    \item Number of significantly associated pairs: 
+    \item List of significant pairs: 
+\end{itemize}
+
+\paragraph{Jaccard Index (JI)}
+\begin{itemize}
+    \item Number of significantly associated pairs: 
+    \item List of significant pairs: 
+\end{itemize}
+
+\paragraph{Pearson's Chi-squared ($\chi^2$)}
+\begin{itemize}
+    \item Number of significantly associated pairs: 
+    \item List of significant pairs: 
+\end{itemize}
+
+\subsubsection{Comparison of Statistics}
+
+\paragraph{Overlap Between Statistics:}
+\begin{itemize}
+    \item MI and JI overlap: 
+    \item MI and $\chi^2$ overlap: 
+    \item JI and $\chi^2$ overlap: 
+    \item All three statistics overlap: 
+\end{itemize}
+
+\paragraph{Which Two Statistics Are Most Similar:}
+
+\paragraph{Preferred Test Statistic and Justification:}
+
+\paragraph{Impact of Using Only Preferred Statistic:}
+
+\subsubsection{Visualizations}
+% Include scatter plots or heatmaps comparing the three statistics
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{figures/task1b_comparison.png}
+%     \caption{Comparison of MI, JI, and $\chi^2$ for 105 variable pairs}
+%     \label{fig:task1b}
+% \end{figure}
+
+\newpage
+
+\section{Task 2: Association Between Continuous Variables}
+
+\subsection{Part (a): Variable Pair from p2a.csv}
+
+\subsubsection{Test Statistics and P-value}
+
+\paragraph{Pearson Correlation ($r_a$):}
+\begin{itemize}
+    \item Correlation coefficient: 
+    \item P-value ($p_a$): 
+    \item Selected significance level ($\alpha$): 
+    \item Sample size: 
+\end{itemize}
+
+\subsubsection{Analysis and Interpretation}
+
+\paragraph{Statistical Significance:}
+
+\paragraph{Magnitude of Association:}
+
+\paragraph{Direction of Association:}
+
+\subsubsection{Visualization}
+% Include scatter plot for p2a.csv
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.6\textwidth]{figures/task2a_scatter.png}
+%     \caption{Scatter plot for p2a.csv}
+%     \label{fig:task2a}
+% \end{figure}
+
+\subsection{Part (b): Comparison of p2a.csv and p2b.csv}
+
+\subsubsection{Test Statistics and P-value for p2b.csv}
+
+\paragraph{Pearson Correlation ($r_b$):}
+\begin{itemize}
+    \item Correlation coefficient: 
+    \item P-value ($p_b$): 
+    \item Selected significance level ($\alpha$): 
+    \item Sample size: 
+\end{itemize}
+
+\subsubsection{Comparison Analysis}
+
+\paragraph{Comparison of Correlations ($r_a$ vs $r_b$):}
+
+\paragraph{Stronger Association Based on Correlations:}
+
+\paragraph{Comparison of P-values ($p_a$ vs $p_b$):}
+
+\paragraph{Stronger Association Based on P-values:}
+
+\paragraph{Agreement Between Correlations and P-values:}
+
+\paragraph{Explanation of Any Discrepancy:}
+
+\paragraph{Visual Assessment from Scatter Plots:}
+
+\paragraph{Agreement with Statistical Measures:}
+
+\subsubsection{Visualizations}
+% Include scatter plots for both datasets side by side
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.45\textwidth]{figures/task2a_scatter.png}
+%     \includegraphics[width=0.45\textwidth]{figures/task2b_scatter.png}
+%     \caption{Scatter plots for p2a.csv (left) and p2b.csv (right)}
+%     \label{fig:task2b}
+% \end{figure}
+
+\subsection{Part (c): Comparison of p2a.csv and p2c.csv}
+
+\subsubsection{Test Statistics and P-value for p2c.csv}
+
+\paragraph{Pearson Correlation ($r_c$):}
+\begin{itemize}
+    \item Correlation coefficient: 
+    \item P-value ($p_c$): 
+    \item Selected significance level ($\alpha$): 
+    \item Sample size: 
+\end{itemize}
+
+\subsubsection{Comparison Analysis}
+
+\paragraph{Comparison of Correlations ($r_a$ vs $r_c$):}
+
+\paragraph{Stronger Association Based on Correlations:}
+
+\paragraph{Comparison of P-values ($p_a$ vs $p_c$):}
+
+\paragraph{Stronger Association Based on P-values:}
+
+\paragraph{Agreement Between Correlations and P-values:}
+
+\paragraph{Explanation of Any Discrepancy:}
+
+\paragraph{Visual Assessment from Scatter Plots:}
+
+\paragraph{Agreement with Statistical Measures:}
+
+\subsubsection{Visualizations}
+% Include scatter plots for both datasets side by side
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.45\textwidth]{figures/task2a_scatter.png}
+%     \includegraphics[width=0.45\textwidth]{figures/task2c_scatter.png}
+%     \caption{Scatter plots for p2a.csv (left) and p2c.csv (right)}
+%     \label{fig:task2c}
+% \end{figure}
+
+\newpage
+
+\section{Code Appendix}
+% Include your code here or reference external files
+% \begin{verbatim}
+% # Your Python/R/MATLAB code here
+% \end{verbatim}
+
+\end{document}
+
