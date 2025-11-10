@@ -23,104 +23,164 @@
 
 \paragraph{Mutual Information (MI)}
 \begin{itemize}
-    \item Observed MI value: 
-    \item Number of permutations (N): 
-    \item P-value: 
-    \item Selected significance level ($\alpha$): 
-    \item Conclusion: 
+    \item Observed MI value: 0.046993
+    \item Number of permutations (N): 10,000
+    \item P-value: 0.0027
+    \item Selected significance level ($\alpha$): 0.05
+    \item Conclusion: Statistically significant association (p-value $<$ $\alpha$)
 \end{itemize}
 
 \paragraph{Jaccard Index (JI)}
 \begin{itemize}
-    \item Observed JI value: 
-    \item Number of permutations (N): 
-    \item P-value: 
-    \item Selected significance level ($\alpha$): 
-    \item Conclusion: 
+    \item Observed JI value: 0.000000
+    \item Number of permutations (N): 10,000
+    \item P-value: 1.0000
+    \item Selected significance level ($\alpha$): 0.05
+    \item Conclusion: No statistically significant association (p-value $\geq$ $\alpha$)
 \end{itemize}
 
 \paragraph{Pearson's Chi-squared ($\chi^2$)}
 \begin{itemize}
-    \item Observed $\chi^2$ value: 
-    \item Degrees of freedom: 
-    \item P-value: 
-    \item Selected significance level ($\alpha$): 
-    \item Conclusion: 
+    \item Observed $\chi^2$ value: 6.455974
+    \item Degrees of freedom: 1
+    \item P-value: 0.01106
+    \item Selected significance level ($\alpha$): 0.05
+    \item Conclusion: Statistically significant association (p-value $<$ $\alpha$)
 \end{itemize}
 
 \subsubsection{Analysis and Interpretation}
 
 \paragraph{Statistical Significance:}
+The three statistics show conflicting results regarding statistical significance at the $\alpha = 0.05$ level. Two out of three statistics (Mutual Information with p-value = 0.0027 and Pearson's $\chi^2$ with p-value = 0.01106) indicate a statistically significant association between the two genomic variants. However, the Jaccard Index shows no significant association (p-value = 1.0000). This discrepancy suggests that while there is some statistical dependence between the variables, it may not manifest as co-occurrence of positive cases (both variants present simultaneously).
 
 \paragraph{Strength of Association:}
+The strength of association appears to be weak based on the observed test statistics:
+
+\begin{itemize}
+    \item \textbf{Mutual Information (0.046993):} MI ranges from 0 (complete independence) to 1 for binary variables. The observed value of 0.047 is very close to 0, indicating a very weak association. This suggests that knowing the state of one genomic variant provides minimal information about the other.
+
+    \item \textbf{Jaccard Index (0.000000):} JI ranges from 0 (no overlap) to 1 (complete overlap). A value of exactly 0 indicates there is no co-occurrence of both variants being present (both equal to 1) simultaneously in any individual. Looking at the contingency table, we see that when variable X = 1, variable Y is always 0 (50 cases), confirming zero overlap.
+
+    \item \textbf{Pearson's $\chi^2$ (6.456):} The magnitude itself is difficult to interpret without context, but the relatively low p-value (0.01106) indicates the departure from independence is unlikely to be due to chance. The effect size, however, appears modest given the sample size of 199 individuals.
+\end{itemize}
 
 \paragraph{Agreement Between Statistics:}
+The statistics show partial agreement: 2 out of 3 tests (MI and $\chi^2$) detect a statistically significant association at $\alpha = 0.05$, while the Jaccard Index does not. This partial disagreement is informative about the nature of the association present in the data.
 
 \paragraph{Explanation of Any Discrepancies:}
+The discrepancy between statistics can be explained by their different mathematical properties and what they measure:
+
+\begin{itemize}
+    \item \textbf{Mutual Information} captures any form of statistical dependence between variables using an information-theoretic approach. It detected significance because there is a deviation from independence in the joint distribution—specifically, when X = 1, Y is never 1 (Y is always 0). This negative association (mutual exclusivity pattern) is captured by MI.
+
+    \item \textbf{Jaccard Index} specifically measures co-occurrence of positive cases (overlap when both variables equal 1). Since the contingency table shows that there are zero cases where both X = 1 and Y = 1 simultaneously, JI = 0 and shows no significance. JI is not sensitive to the negative association pattern present in this data.
+
+    \item \textbf{Pearson's $\chi^2$ test} evaluates whether the observed frequencies in the contingency table differ significantly from what would be expected under independence. The test detected significance because the observed cell count of 0 (when X = 1 and Y = 1) differs notably from the expected count of approximately 5.28 under independence.
+\end{itemize}
+
+In summary, the data exhibits a pattern of negative association or mutual exclusivity—when one variant is present, the other tends to be absent. This pattern is captured by MI and $\chi^2$ but not by JI, which only measures positive co-occurrence. The disagreement among statistics is not a contradiction but rather reveals different aspects of the association structure in the data.
 
 \subsubsection{Visualization}
-% Include permutation test visualization here
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.8\textwidth]{figures/task1a_permutation.png}
-%     \caption{Permutation test results for Task 1(a)}
-%     \label{fig:task1a}
-% \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{task1a_permutation.png}
+    \caption{Permutation test results and chi-squared distribution for Task 1(a). Left: Mutual Information permutation test showing the null distribution (blue) and observed value (red dashed line). Center: Jaccard Index permutation test. Right: Pearson's chi-squared test showing the theoretical $\chi^2$ distribution and the observed test statistic. The observed MI and $\chi^2$ values fall in the tail of their respective distributions, indicating statistical significance.}
+    \label{fig:task1a}
+\end{figure}
 
 \subsection{Part (b): 105 Variable Pairs from p1b.csv}
 
 \subsubsection{Test Statistics and P-values}
 
-\paragraph{Number of Permutations (N):}
+\paragraph{Number of Permutations (N):} 10,000
 
-\paragraph{Selected Significance Level ($\alpha$):}
+\paragraph{Selected Significance Level ($\alpha$):} 0.05
 
-\paragraph{Multiple Hypothesis Correction Method:}
+\paragraph{Multiple Hypothesis Correction Method:} Benjamini-Hochberg (BH) procedure
+
+The Benjamini-Hochberg procedure controls the False Discovery Rate (FDR) and is appropriate for genomic studies where we are testing multiple hypotheses (105 pairs in this case). Without correction, testing at $\alpha = 0.05$ would lead to an expected $105 \times 0.05 = 5.25$ false positives even if there were no true associations. The BH procedure adjusts the threshold for each test based on its rank to maintain the overall FDR at the specified $\alpha$ level.
 
 \subsubsection{Results Summary}
 
 \paragraph{Mutual Information (MI)}
 \begin{itemize}
-    \item Number of significantly associated pairs: 
-    \item List of significant pairs: 
+    \item Number of significantly associated pairs: 91 out of 105 (86.7\%)
+    \item List of significant pairs: V0-V1, V0-V2, V0-V3, V0-V4, V0-V5, V0-V6, V0-V7, V0-V8, V0-V9, V0-V10, V0-V11, V0-V12, V0-V13, V0-V14, V1-V2, V1-V3, V1-V4, V1-V5, V1-V6, V1-V7, V1-V8, V1-V9, V1-V11, V2-V3, V2-V4, V2-V5, V2-V6, V2-V7, V2-V8, V2-V9, V2-V10, V2-V11, V2-V12, V2-V13, V3-V4, V3-V5, V3-V6, V3-V7, V3-V8, V3-V9, V3-V10, V3-V11, V3-V12, V3-V13, V3-V14, V4-V5, V4-V6, V4-V7, V4-V8, V4-V9, V5-V6, V5-V7, V5-V8, V5-V9, V5-V10, V5-V11, V5-V12, V5-V13, V5-V14, V6-V7, V6-V8, V6-V9, V6-V10, V6-V11, V6-V12, V6-V13, V6-V14, V7-V8, V7-V9, V7-V10, V7-V11, V7-V12, V7-V13, V8-V9, V8-V10, V8-V11, V8-V12, V8-V13, V9-V10, V9-V11, V9-V12, V9-V13, V9-V14, V10-V11, V10-V12, V10-V13, V10-V14, V11-V12, V11-V14, V12-V13, V12-V14
 \end{itemize}
 
 \paragraph{Jaccard Index (JI)}
 \begin{itemize}
-    \item Number of significantly associated pairs: 
-    \item List of significant pairs: 
+    \item Number of significantly associated pairs: 56 out of 105 (53.3\%)
+    \item List of significant pairs: V0-V2, V0-V3, V0-V6, V0-V7, V0-V8, V0-V9, V0-V10, V0-V11, V0-V12, V1-V2, V1-V4, V1-V8, V1-V11, V2-V3, V2-V4, V2-V6, V2-V7, V2-V8, V2-V9, V2-V10, V2-V11, V2-V12, V3-V6, V3-V7, V3-V8, V3-V9, V3-V10, V3-V11, V3-V12, V4-V8, V4-V11, V5-V13, V6-V7, V6-V8, V6-V9, V6-V10, V6-V11, V6-V12, V7-V8, V7-V9, V7-V10, V7-V11, V7-V12, V8-V9, V8-V10, V8-V11, V8-V12, V9-V10, V9-V11, V9-V12, V10-V11, V10-V12, V10-V14, V11-V12, V11-V14, V12-V14
 \end{itemize}
 
 \paragraph{Pearson's Chi-squared ($\chi^2$)}
 \begin{itemize}
-    \item Number of significantly associated pairs: 
-    \item List of significant pairs: 
+    \item Number of significantly associated pairs: 90 out of 105 (85.7\%)
+    \item List of significant pairs: V0-V1, V0-V2, V0-V3, V0-V4, V0-V5, V0-V6, V0-V7, V0-V8, V0-V9, V0-V10, V0-V11, V0-V12, V0-V13, V0-V14, V1-V2, V1-V3, V1-V4, V1-V5, V1-V6, V1-V7, V1-V8, V1-V11, V2-V3, V2-V4, V2-V5, V2-V6, V2-V7, V2-V8, V2-V9, V2-V10, V2-V11, V2-V12, V2-V13, V3-V4, V3-V5, V3-V6, V3-V7, V3-V8, V3-V9, V3-V10, V3-V11, V3-V12, V3-V13, V3-V14, V4-V5, V4-V6, V4-V7, V4-V8, V4-V11, V5-V6, V5-V7, V5-V8, V5-V9, V5-V10, V5-V11, V5-V12, V5-V13, V5-V14, V6-V7, V6-V8, V6-V9, V6-V10, V6-V11, V6-V12, V6-V13, V6-V14, V7-V8, V7-V9, V7-V10, V7-V11, V7-V12, V7-V13, V8-V9, V8-V10, V8-V11, V8-V12, V8-V13, V9-V10, V9-V11, V9-V12, V9-V13, V9-V14, V10-V11, V10-V12, V10-V13, V10-V14, V11-V12, V11-V14, V12-V13, V12-V14
 \end{itemize}
 
 \subsubsection{Comparison of Statistics}
 
 \paragraph{Overlap Between Statistics:}
 \begin{itemize}
-    \item MI and JI overlap: 
-    \item MI and $\chi^2$ overlap: 
-    \item JI and $\chi^2$ overlap: 
-    \item All three statistics overlap: 
+    \item MI and JI overlap: 55 pairs (60.4\% of MI significant, 98.2\% of JI significant)
+    \item MI and $\chi^2$ overlap: 89 pairs (97.8\% of MI significant, 98.9\% of $\chi^2$ significant)
+    \item JI and $\chi^2$ overlap: 56 pairs (100\% of JI significant, 62.2\% of $\chi^2$ significant)
+    \item All three statistics overlap: 55 pairs (52.4\% of all 105 pairs)
 \end{itemize}
+
+The overlap analysis reveals that nearly all pairs identified as significant by the Jaccard Index are also identified by the other two statistics. However, MI and $\chi^2$ identify additional significant pairs that JI does not detect.
 
 \paragraph{Which Two Statistics Are Most Similar:}
 
+Based on Spearman correlation analysis of the test statistic values across all 105 pairs:
+\begin{itemize}
+    \item MI vs JI correlation: $\rho = 0.683$
+    \item MI vs $\chi^2$ correlation: $\rho = 0.989$
+    \item JI vs $\chi^2$ correlation: $\rho = 0.737$
+\end{itemize}
+
+\textbf{Mutual Information and $\chi^2$ are the most similar pair} ($\rho = 0.989$), showing nearly perfect rank correlation. This makes sense because both statistics measure general statistical dependence between variables, whereas JI specifically measures co-occurrence of positive cases.
+
 \paragraph{Preferred Test Statistic and Justification:}
+
+For genomic variant association studies, \textbf{I would prefer Mutual Information (MI)} for the following reasons:
+
+\begin{enumerate}
+    \item \textbf{Captures all types of dependence:} MI detects both positive associations (co-occurrence) and negative associations (mutual exclusivity), as demonstrated in Part (a). This is crucial in genomics where variants may be mutually exclusive due to biological constraints.
+
+    \item \textbf{Information-theoretic interpretation:} MI directly quantifies how much information one variant provides about another, which has clear biological meaning.
+
+    \item \textbf{Non-parametric:} Unlike $\chi^2$, MI makes no distributional assumptions and relies on permutation testing, making it robust for sparse data common in genomics.
+
+    \item \textbf{Comprehensive detection:} MI identified 91 significant pairs, capturing nearly all pairs found by $\chi^2$ (89 overlap) and JI (55 overlap), plus additional associations.
+\end{enumerate}
 
 \paragraph{Impact of Using Only Preferred Statistic:}
 
+If we used only Mutual Information among the three statistics tested:
+
+\begin{itemize}
+    \item \textbf{Minimal loss of information:} We would identify 91 significant pairs, missing only 1 pair that $\chi^2$ uniquely identified (V1-V9) and 1 pair that JI uniquely identified (none that weren't also in MI).
+
+    \item \textbf{More comprehensive coverage:} We would capture 2 additional pairs that $\chi^2$ missed (V4-V9) and 36 additional pairs that JI missed, suggesting MI has higher sensitivity while maintaining good specificity after BH correction.
+
+    \item \textbf{Biological interpretation:} We would not lose significant biological insights. The high correlation between MI and $\chi^2$ ($\rho = 0.989$) suggests they provide largely redundant information, while MI's ability to detect associations missed by JI means we would gain rather than lose information by using MI alone.
+
+    \item \textbf{Computational efficiency:} Using a single well-chosen statistic reduces computational burden without sacrificing detection power, which is valuable for large-scale genomic studies.
+\end{itemize}
+
+In summary, using MI exclusively would result in the most comprehensive and interpretable set of associations, with negligible loss compared to using all three statistics.
+
 \subsubsection{Visualizations}
-% Include scatter plots or heatmaps comparing the three statistics
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.8\textwidth]{figures/task1b_comparison.png}
-%     \caption{Comparison of MI, JI, and $\chi^2$ for 105 variable pairs}
-%     \label{fig:task1b}
-% \end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{task1b_comparison.png}
+    \caption{Comprehensive comparison of MI, JI, and $\chi^2$ for 105 variable pairs. \textbf{Top row:} Scatter plots showing the relationship between test statistics, with significant pairs marked. The near-linear relationship between MI and $\chi^2$ (center) confirms their high correlation ($\rho = 0.989$). \textbf{Middle row:} P-value distributions for each statistic, showing enrichment of small p-values indicating true associations. \textbf{Bottom:} Overlap analysis showing the number of pairs uniquely or jointly identified as significant by each statistic combination. The visualization demonstrates that MI and $\chi^2$ show strong agreement, while JI identifies a subset of associations focused on co-occurrence patterns.}
+    \label{fig:task1b}
+\end{figure}
 
 \newpage
 
