@@ -8,8 +8,8 @@
 \usepackage{float}
 
 \title{CSDS 313/413: Introduction to Data Analysis \\ Homework 3: Pairwise Association \\ Solutions}
-\author{Your Name}
-\date{\today}
+\author{Wiam Skakri and Elizabeth Kitakule}
+\date{\11/10/2025}
 
 \begin{document}
 
@@ -207,13 +207,13 @@ In summary, using MI exclusively would result in the most comprehensive and inte
 \paragraph{Direction of Association:} The correction is positive. Given that the correlation coefficient has a positive sign, it indicates that as one variable increases, the other increases. The association indicates an upward trend in the sample size. 
 
 \subsubsection{Visualization}
-% Include scatter plot for p2a.csv
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.6\textwidth]{figures/task2a_scatter.png}
-%     \caption{Scatter plot for p2a.csv}
-%     \label{fig:task2a}
-% \end{figure}
+ Include scatter plot for p2a.csv
+\begin{figure}[H]
+     \centering
+     \includegraphics[width=0.6\textwidth]{ScatterPlot_p2a.png}
+     \caption{Scatter plot for p2a.csv}
+     \label{fig:task2a}
+ \end{figure}
 
 \subsection{Part (b): Comparison of p2a.csv and p2b.csv}
 
@@ -221,39 +221,38 @@ In summary, using MI exclusively would result in the most comprehensive and inte
 
 \paragraph{Pearson Correlation ($r_b$):}
 \begin{itemize}
-    \item Correlation coefficient: 
-    \item P-value ($p_b$): 
-    \item Selected significance level ($\alpha$): 
-    \item Sample size: 
+    \item Correlation coefficient:  0.9312196333264214
+    \item P-value ($p_b$): 3.73732100843861e-49
+    \item Selected significance level ($\alpha$): 0.05
+    \item Sample size: 110 samples
 \end{itemize}
 
 \subsubsection{Comparison Analysis}
 
-\paragraph{Comparison of Correlations ($r_a$ vs $r_b$):}
+\paragraph{Comparison of Correlations ($r_a$ vs $r_b$):} $r_b$ indicates a stronger relation than $r_a$. $r_b$ is 0.931, which indicates a strong association between the two variables in p2b.csv. $r_a$ showed us a moderate association that displayed an association but not at the same magnitude of $r_b$.
 
-\paragraph{Stronger Association Based on Correlations:}
+\paragraph{Stronger Association Based on Correlations:} $r_b$ 
 
-\paragraph{Comparison of P-values ($p_a$ vs $p_b$):}
+\paragraph{Comparison of P-values ($p_a$ vs $p_b$):} $p_b$ is extremely small and far below the significance level, 0.05. The p-value, $p_a$ , is also extremely small and both indicate the statistical significance of the association between the two variables in each dataset. We reject the null hypothesis that there is no association between the variables. Including the strong $r_b$, the values show a clear and statistically significant linear relationship between the variables. 
 
-\paragraph{Stronger Association Based on P-values:}
 
-\paragraph{Agreement Between Correlations and P-values:}
+\paragraph{Stronger Association Based on P-values:} $p_a$ has a stronger association based on p-value even though it has a lower correlation coefficient. 
 
-\paragraph{Explanation of Any Discrepancy:}
+\paragraph{Agreement Between Correlations and P-values:} No. Judgement based on solely correlation coefficients indicate that the data set p2b has a stronger association. However, judgement based solely on p-values, p2a has a stronger association based off the smaller p-value. 
 
-\paragraph{Visual Assessment from Scatter Plots:}
+\paragraph{Explanation of Any Discrepancy:}  The difference in p-value could be due to difference in sample sizes. A large dataset like that of p2a will result in smaller p-values regardless of the fact that there is a weaker association. The correlation coefficient directly reports the strength of the association, regardless of the dataset size.
 
-\paragraph{Agreement with Statistical Measures:}
+\paragraph{Visual Assessment from Scatter Plots:} The scatterplots display the difference in sample size between p2a and p2b. Therefore, adding to the p-value discrepancy and its justification. Both the scatterplots show an upward or positive linear association. 
+
 
 \subsubsection{Visualizations}
-% Include scatter plots for both datasets side by side
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.45\textwidth]{figures/task2a_scatter.png}
-%     \includegraphics[width=0.45\textwidth]{figures/task2b_scatter.png}
-%     \caption{Scatter plots for p2a.csv (left) and p2b.csv (right)}
-%     \label{fig:task2b}
-% \end{figure}
+ \begin{figure}[H]
+     \centering
+     \includegraphics[width=0.45\textwidth]{ScatterPlot_p2a.png}
+     \includegraphics[width=0.45\textwidth]{ScatterPlot_p2b.png}
+     \caption{Scatter plots for p2a.csv (left) and p2b.csv (right)}
+     \label{fig:task2b}
+ \end{figure}
 
 \subsection{Part (c): Comparison of p2a.csv and p2c.csv}
 
@@ -261,39 +260,36 @@ In summary, using MI exclusively would result in the most comprehensive and inte
 
 \paragraph{Pearson Correlation ($r_c$):}
 \begin{itemize}
-    \item Correlation coefficient: 
-    \item P-value ($p_c$): 
-    \item Selected significance level ($\alpha$): 
-    \item Sample size: 
+    \item Correlation coefficient: 0.0411789977768318
+    \item P-value ($p_c$): 0.059195916605514404
+    \item Selected significance level ($\alpha$): 0.05
+    \item Sample size: 2100 samples
 \end{itemize}
 
 \subsubsection{Comparison Analysis}
 
-\paragraph{Comparison of Correlations ($r_a$ vs $r_c$):}
+\paragraph{Comparison of Correlations ($r_a$ vs $r_c$):}  $r_c$ indicates a weaker relation than $r_a$. $r_c$ is 0.0412, which indicates a weak association between the two variables in p2c. $r_a$ showed us a moderate association that displayed an association at a higher magnitude than $r_c$. $r_c$  shows little association between the two variables in the dataset. 
 
-\paragraph{Stronger Association Based on Correlations:}
+\paragraph{Stronger Association Based on Correlations:} $r_a$ has a stronger association with 0.381.
 
-\paragraph{Comparison of P-values ($p_a$ vs $p_c$):}
+\paragraph{Comparison of P-values ($p_a$ vs $p_c$):}  $p_c$ is greater than the chosen significance level, 0.05. $p_c$. is 0.0591. In comparison, $p_a$ is significantly smaller than the significance level. therefore, we fail to reject the null hypothesis that there is no association between the variables in the dataset, p2c. $p_c$ indicates that the relationship is not statistically significant. On the other hand, The p-value, $p_a$ , is extremely small and indicates the statistical significance of the association between the two variables in each dataset. We reject the null hypothesis that there is no association between the variables
 
-\paragraph{Stronger Association Based on P-values:}
+\paragraph{Stronger Association Based on P-values:} $p_a$ indicates a stronger association in the dataset, p2a. 
 
-\paragraph{Agreement Between Correlations and P-values:}
+\paragraph{Agreement Between Correlations and P-values:} Yes. The correlation coefficients and p-values allow for the same conclusion when comparing the linear relationship between the two datasets. Both the p-value and the correlation indicate a linear relationship, however moderate , that exists in dataset, p2a. The same values for dataset, p2c, indicate a lack of a linear relationship and display a weak or no association between the variables in the dataset. 
 
-\paragraph{Explanation of Any Discrepancy:}
+\paragraph{Visual Assessment from Scatter Plots:} The scatterplot of the variables in p2c display the lack of linear association between the two variables. Unlike the scatter plots for p2a and p2c where there was a clear upward trend with an increase in each variable, here, the digram shows that there is a decrease and increase of the variables. The change in variable 1 has no predictable linear effect on variable 2. 
 
-\paragraph{Visual Assessment from Scatter Plots:}
-
-\paragraph{Agreement with Statistical Measures:}
+\paragraph{Agreement with Statistical Measures:} The visual assessment agrees with the statistical measures as there is no visible linear association.
 
 \subsubsection{Visualizations}
-% Include scatter plots for both datasets side by side
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.45\textwidth]{figures/task2a_scatter.png}
-%     \includegraphics[width=0.45\textwidth]{figures/task2c_scatter.png}
-%     \caption{Scatter plots for p2a.csv (left) and p2c.csv (right)}
-%     \label{fig:task2c}
-% \end{figure}
+ \begin{figure}[H]
+     \centering
+     \includegraphics[width=0.45\textwidth]{ScatterPlot_p2a.png}
+     \includegraphics[width=0.45\textwidth]{ScatterPlot_p2c.png}
+     \caption{Scatter plots for p2a.csv (left) and p2c.csv (right)}
+     \label{fig:task2c}
+ \end{figure}
 
 \newpage
 
