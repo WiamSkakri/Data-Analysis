@@ -9,7 +9,7 @@
 
 \title{CSDS 313/413: Introduction to Data Analysis \\ Homework 3: Pairwise Association \\ Solutions}
 \author{Wiam Skakri and Elizabeth Kitakule}
-\date{\11/10/2025}
+\date{11/10/2025}
 
 \begin{document}
 
@@ -98,26 +98,25 @@ In summary, the data exhibits a pattern of negative association or mutual exclus
 
 \paragraph{Multiple Hypothesis Correction Method:} Benjamini-Hochberg (BH) procedure
 
-The Benjamini-Hochberg procedure controls the False Discovery Rate (FDR) and is appropriate for genomic studies where we are testing multiple hypotheses (105 pairs in this case). Without correction, testing at $\alpha = 0.05$ would lead to an expected $105 \times 0.05 = 5.25$ false positives even if there were no true associations. The BH procedure adjusts the threshold for each test based on its rank to maintain the overall FDR at the specified $\alpha$ level.
 
 \subsubsection{Results Summary}
 
 \paragraph{Mutual Information (MI)}
 \begin{itemize}
     \item Number of significantly associated pairs: 91 out of 105 (86.7\%)
-    \item List of significant pairs: V0-V1, V0-V2, V0-V3, V0-V4, V0-V5, V0-V6, V0-V7, V0-V8, V0-V9, V0-V10, V0-V11, V0-V12, V0-V13, V0-V14, V1-V2, V1-V3, V1-V4, V1-V5, V1-V6, V1-V7, V1-V8, V1-V9, V1-V11, V2-V3, V2-V4, V2-V5, V2-V6, V2-V7, V2-V8, V2-V9, V2-V10, V2-V11, V2-V12, V2-V13, V3-V4, V3-V5, V3-V6, V3-V7, V3-V8, V3-V9, V3-V10, V3-V11, V3-V12, V3-V13, V3-V14, V4-V5, V4-V6, V4-V7, V4-V8, V4-V9, V5-V6, V5-V7, V5-V8, V5-V9, V5-V10, V5-V11, V5-V12, V5-V13, V5-V14, V6-V7, V6-V8, V6-V9, V6-V10, V6-V11, V6-V12, V6-V13, V6-V14, V7-V8, V7-V9, V7-V10, V7-V11, V7-V12, V7-V13, V8-V9, V8-V10, V8-V11, V8-V12, V8-V13, V9-V10, V9-V11, V9-V12, V9-V13, V9-V14, V10-V11, V10-V12, V10-V13, V10-V14, V11-V12, V11-V14, V12-V13, V12-V14
+
 \end{itemize}
 
 \paragraph{Jaccard Index (JI)}
 \begin{itemize}
     \item Number of significantly associated pairs: 56 out of 105 (53.3\%)
-    \item List of significant pairs: V0-V2, V0-V3, V0-V6, V0-V7, V0-V8, V0-V9, V0-V10, V0-V11, V0-V12, V1-V2, V1-V4, V1-V8, V1-V11, V2-V3, V2-V4, V2-V6, V2-V7, V2-V8, V2-V9, V2-V10, V2-V11, V2-V12, V3-V6, V3-V7, V3-V8, V3-V9, V3-V10, V3-V11, V3-V12, V4-V8, V4-V11, V5-V13, V6-V7, V6-V8, V6-V9, V6-V10, V6-V11, V6-V12, V7-V8, V7-V9, V7-V10, V7-V11, V7-V12, V8-V9, V8-V10, V8-V11, V8-V12, V9-V10, V9-V11, V9-V12, V10-V11, V10-V12, V10-V14, V11-V12, V11-V14, V12-V14
+
 \end{itemize}
 
 \paragraph{Pearson's Chi-squared ($\chi^2$)}
 \begin{itemize}
     \item Number of significantly associated pairs: 90 out of 105 (85.7\%)
-    \item List of significant pairs: V0-V1, V0-V2, V0-V3, V0-V4, V0-V5, V0-V6, V0-V7, V0-V8, V0-V9, V0-V10, V0-V11, V0-V12, V0-V13, V0-V14, V1-V2, V1-V3, V1-V4, V1-V5, V1-V6, V1-V7, V1-V8, V1-V11, V2-V3, V2-V4, V2-V5, V2-V6, V2-V7, V2-V8, V2-V9, V2-V10, V2-V11, V2-V12, V2-V13, V3-V4, V3-V5, V3-V6, V3-V7, V3-V8, V3-V9, V3-V10, V3-V11, V3-V12, V3-V13, V3-V14, V4-V5, V4-V6, V4-V7, V4-V8, V4-V11, V5-V6, V5-V7, V5-V8, V5-V9, V5-V10, V5-V11, V5-V12, V5-V13, V5-V14, V6-V7, V6-V8, V6-V9, V6-V10, V6-V11, V6-V12, V6-V13, V6-V14, V7-V8, V7-V9, V7-V10, V7-V11, V7-V12, V7-V13, V8-V9, V8-V10, V8-V11, V8-V12, V8-V13, V9-V10, V9-V11, V9-V12, V9-V13, V9-V14, V10-V11, V10-V12, V10-V13, V10-V14, V11-V12, V11-V14, V12-V13, V12-V14
+
 \end{itemize}
 
 \subsubsection{Comparison of Statistics}
@@ -168,10 +167,9 @@ If we used only Mutual Information among the three statistics tested:
 
     \item \textbf{Biological interpretation:} We would not lose significant biological insights. The high correlation between MI and $\chi^2$ ($\rho = 0.989$) suggests they provide largely redundant information, while MI's ability to detect associations missed by JI means we would gain rather than lose information by using MI alone.
 
-    \item \textbf{Computational efficiency:} Using a single well-chosen statistic reduces computational burden without sacrificing detection power, which is valuable for large-scale genomic studies.
 \end{itemize}
 
-In summary, using MI exclusively would result in the most comprehensive and interpretable set of associations, with negligible loss compared to using all three statistics.
+
 
 \subsubsection{Visualizations}
 
@@ -200,7 +198,7 @@ In summary, using MI exclusively would result in the most comprehensive and inte
 
 \subsubsection{Analysis and Interpretation}
 
-\paragraph{Statistical Significance:} The p-value is an extremely small value, 1.04 e-83. This is far below the chosen significance level, 0.05. Therefore, we reject the null hypothesis. There is no linear relationship between the two variables in p2a. The correlation is statistically significant. The correlation likely did not happen by random chance. 
+\paragraph{Statistical Significance:} The p-value is an extremely small value, 1.04 e-83. This is far below the chosen significance level, 0.05. Therefore, we reject the null hypothesis of no linear relationship — there is a statistically significant positive linear relationship between the two variables in p2a. The correlation likely did not happen by random chance. 
 
 \paragraph{Magnitude of Association:} The correlation coefficient, 0.38, indicates a moderate association between the two variables. There is a relationhsip present but it not a strong one. The variation is variable 1 is not wholly explained by the other variable in the dataset.
 
