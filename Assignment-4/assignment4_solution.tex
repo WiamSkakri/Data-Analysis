@@ -281,49 +281,25 @@ Z-score & 182.49 \\
 
 \paragraph{Methodology}
 
-To quantify the agreement between cluster membership and party affiliation, we use \textbf{mutual information (MI)} and its variants. Mutual information measures how much knowing one variable tells us about another.
+To quantify the agreement between cluster membership and party affiliation, we use \textbf{Normalized Mutual Information (NMI)}.
 
-\paragraph{Mutual Information Metrics}
+\paragraph{Normalized Mutual Information}
 
-We computed three related metrics:
+NMI measures how much knowing one variable tells us about another, normalized to a 0-1 scale:
+
+$$NMI(X;Y) = \frac{MI(X;Y)}{\sqrt{H(X) \cdot H(Y)}}$$
+
+where $MI$ is mutual information and $H$ is entropy.
 
 \begin{itemize}
-    \item \textbf{Mutual Information (MI)}: $MI(X;Y) = \sum_{x,y} P(x,y) \log \frac{P(x,y)}{P(x)P(y)}$
-    \begin{itemize}
-        \item Measures reduction in uncertainty about $Y$ when $X$ is known
-        \item Range: $[0, \min(H(X), H(Y))]$ where $H$ is entropy
-        \item Higher values indicate stronger association
-    \end{itemize}
-
-    \item \textbf{Normalized Mutual Information (NMI)}: $NMI(X;Y) = \frac{MI(X;Y)}{\sqrt{H(X) \cdot H(Y)}}$
-    \begin{itemize}
-        \item Normalized version of MI
-        \item Range: $[0, 1]$ where 1 = perfect agreement
-        \item Easier to interpret across different datasets
-    \end{itemize}
-
-    \item \textbf{Adjusted Mutual Information (AMI)}: Adjusted for chance
-    \begin{itemize}
-        \item Accounts for agreement expected by random chance
-        \item Range: $[0, 1]$ where 0 = random, 1 = perfect
-    \end{itemize}
+    \item Range: $[0, 1]$ where 0 = no relationship, 1 = perfect agreement
+    \item Measures reduction in uncertainty about party when cluster is known
+    \item Higher values indicate stronger association
 \end{itemize}
 
 \paragraph{Results for Clustering on All 16 Votes}
 
-\begin{table}[H]
-\centering
-\begin{tabular}{|l|c|}
-\hline
-\textbf{Metric} & \textbf{Value} \\
-\hline
-Mutual Information (MI) & 0.3461 \\
-Normalized MI (NMI) & 0.5097 \\
-Adjusted MI (AMI) & 0.5088 \\
-\hline
-\end{tabular}
-\caption{Mutual information metrics quantifying agreement between clusters (from all 16 votes) and party affiliations.}
-\end{table}
+\textbf{NMI = 0.5097}
 
 \textbf{Interpretation}: NMI = 0.51 indicates strong agreement between clustering and party affiliation. Knowing which cluster a congress member belongs to substantially reduces uncertainty about their party affiliation.
 
@@ -354,41 +330,27 @@ Figure \ref{fig:part_c} shows the comparison between the two clustering approach
 \centering
 \begin{tabular}{|l|c|c|c|}
 \hline
-\textbf{Metric} & \textbf{All 16 Votes} & \textbf{First 2 PCs} & \textbf{Difference} \\
+\textbf{Approach} & \textbf{NMI} & \textbf{Difference} \\
 \hline
-MI & 0.3461 & 0.3290 & +0.0170 \\
-NMI & 0.5097 & 0.4851 & +0.0246 \\
-AMI & 0.5088 & 0.4842 & +0.0246 \\
-ARI & 0.5850 & 0.5709 & +0.0141 \\
+All 16 Votes & 0.5097 & - \\
+First 2 PCs & 0.4851 & -0.0246 \\
 \hline
 \end{tabular}
-\caption{Comparison of agreement metrics between two clustering approaches. Positive differences indicate all 16 votes performs better.}
+\caption{NMI comparison between clustering approaches. All 16 votes achieves higher agreement with party affiliations.}
 \end{table}
 
 \paragraph{Answer: Which Clustering Agrees More with Party Affiliations?}
 
 \textbf{Clustering on all 16 votes agrees more with party affiliations (NMI = 0.5097) compared to clustering on first 2 PCs (NMI = 0.4851).}
 
-\textbf{Key findings:}
-\begin{itemize}
-    \item All 16 votes outperforms PC1-PC2 across all metrics (MI, NMI, AMI, ARI)
-    \item The difference is consistent but modest (2.46 percentage points in NMI)
-    \item Both approaches achieve reasonably high agreement ($>$ 0.48 NMI)
-\end{itemize}
-
-\paragraph{Interpretation: Why Does All 16 Votes Perform Better?}
 
 \textbf{Information retention}: The first 2 principal components capture only 56.24\% of the total variance, meaning 43.76\% of information is discarded. While PC1 strongly correlates with party (as shown in Part A), the missing dimensions contain additional party-discriminating information.
 
 \textbf{Multiple policy dimensions}: Party differences span multiple policy domains (economic, social, foreign policy). While PC1-PC2 captures the dominant axes of variation, the full 16-dimensional space represents these nuances more completely.
 
-\textbf{Detailed voting patterns}: Individual votes may capture specific party differences that are diluted or lost in the dimensionality reduction process. The full vote space preserves these fine-grained distinctions.
 
-\textbf{Trade-off between visualization and accuracy}:
-\begin{itemize}
-    \item \textbf{For visualization}: PC1-PC2 is superior (2D plots, still achieves 0.485 NMI)
-    \item \textbf{For clustering accuracy}: All 16 votes is superior (leverages all information, achieves 0.510 NMI)
-\end{itemize}
+
+
 
 \paragraph{Practical Implications}
 
@@ -400,6 +362,231 @@ The modest difference (0.025 in NMI) between approaches suggests:
     \item For maximizing classification accuracy, using all features is preferable
 \end{enumerate}
 
-This finding validates both the dimensionality reduction approach (most information is in PC1-PC2) and the value of retaining full feature space when accuracy is critical.
+
+
+\section{Task 2: Predictive Modeling}
+
+\subsection{Can Your Model Taste Good Wine?}
+
+
+
+\subsection{Part A: Label Design and Discretization}
+
+\subsubsection{Discretization Strategy}
+
+To convert the regression problem (predicting quality scores 0-10) into a binary classification task, I discretized the quality scores into two classes using the following criterion:
+
+\begin{itemize}
+    \item \textbf{Good Wine}: Quality score $> 5$
+    \item \textbf{Bad Wine}: Quality score $\leq 5$
+\end{itemize}
+
+This threshold was applied consistently to both red and white wine datasets to ensure models trained on one wine type can be meaningfully evaluated on the other during cross-domain testing.
+
+\subsubsection{Original Quality Score Distributions}
+
+Before discretization, I analyzed the original quality score distributions in both datasets. Figure \ref{fig:task2_label_design} (top row) shows the original quality distributions.
+
+\paragraph{Key Observations:}
+\begin{itemize}
+    \item \textbf{Red Wine}: Quality scores range from 3 to 8, with a mean of 5.64. The distribution is approximately normal, centered around quality scores 5 and 6 (681 and 638 samples respectively).
+    \item \textbf{White Wine}: Quality scores range from 3 to 9, with a mean of 5.88. The distribution is also approximately normal, with the highest frequency at quality 6 (2,198 samples) and 5 (1,457 samples).
+    \item \textbf{Comparison}: White wines have slightly higher average quality scores than red wines, and a wider quality range (3-9 vs. 3-8).
+\end{itemize}
+
+\subsubsection{Class Distribution After Discretization}
+
+After applying the threshold of 5, the resulting class distributions are shown in Figure \ref{fig:task2_label_design} (bottom row):
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Wine Type} & \textbf{Good Count} & \textbf{Good \%} & \textbf{Bad Count} & \textbf{Bad \%} \\
+\hline
+Red Wine & 855 & 53.5\% & 744 & 46.5\% \\
+White Wine & 3,258 & 66.5\% & 1,640 & 33.5\% \\
+\hline
+\end{tabular}
+\caption{Class distribution after discretization using threshold $>$ 5.}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{task2_part_a_label_design.png}
+    \caption{Task 2 Part A: Wine quality label design and discretization. \textbf{Top row}: Original quality score distributions for red wine (left), white wine (middle), and combined comparison (right), with the discretization threshold marked at quality = 5. \textbf{Bottom row}: Class distributions after discretization for red wine (left), white wine (middle), and comparison (right).}
+    \label{fig:task2_label_design}
+\end{figure}
+
+\subsubsection{Rationale for Label Design}
+
+I discretized wine quality using a threshold of 5 (quality $>$ 5 = Good, $\leq$ 5 = Bad) for the following reasons:
+
+\textbf{Interpretability}: This threshold separates above-average wines (quality 6-9) from average and below-average wines (quality 3-5), which aligns with the intuitive notion of ``good'' wine based on the 0-10 quality scale. Wines with quality scores above 5 represent those that received favorable ratings from wine tasters.
+
+\textbf{Class Balance}: This approach yields relatively balanced classes. Red wine: 53.5\% good, 46.5\% bad; White wine: 66.5\% good, 33.5\% bad. This balance helps prevent models from being biased toward the majority class and ensures both classes have sufficient representation for learning meaningful patterns.
+
+\textbf{Consistent Application}: The threshold is applied identically to both red and white wine datasets, ensuring models trained on one type can be meaningfully evaluated on the other during cross-domain testing in Part B.
+
+\textbf{Sufficient Samples}: Both classes have adequate sample sizes in each dataset for reliable model training and evaluation. Even the smaller class (red wine ``bad'') has 744 samples, providing sufficient data for robust learning.
+
+\subsection{Part B: Model Training and Evaluation}
+
+In this part, I trained two classification models with different complexity levels and evaluated their performance both within the same wine type (in-domain) and across different wine types (cross-domain).
+
+\subsubsection{Model Selection}
+
+I selected two classification models that differ in complexity and learning capacity:
+
+\paragraph{Model 1: Logistic Regression (Simple Baseline)}
+
+Logistic Regression is a linear classifier that models the probability of a sample belonging to a class using a logistic function. It serves as a simple, interpretable baseline.
+
+\textbf{Parameters:}
+\begin{itemize}
+    \item Solver: L-BFGS (Limited-memory Broyden-Fletcher-Goldfarb-Shanno)
+    \item Maximum iterations: 1000
+    \item Regularization: L2 (default)
+\end{itemize}
+
+\paragraph{Model 2: Neural Network (Complex Model)}
+
+A Multi-Layer Perceptron (MLP) neural network with two hidden layers, capable of learning complex non-linear patterns.
+
+\textbf{Architecture:}
+\begin{itemize}
+    \item Input layer: 11 features (physicochemical attributes)
+    \item Hidden layer 1: 64 neurons with ReLU activation
+    \item Hidden layer 2: 32 neurons with ReLU activation
+    \item Output layer: 2 classes (Good/Bad wine)
+\end{itemize}
+
+\textbf{Training Parameters:}
+\begin{itemize}
+    \item Optimizer: Adam (adaptive learning rate)
+    \item Batch size: 32
+    \item Maximum epochs: 500
+    \item Early stopping: Enabled (patience = 20 iterations)
+    \item Validation split: 10\% of training data
+    \item L2 regularization ($\alpha$ = 0.0001)
+\end{itemize}
+
+\subsubsection{Data Preparation}
+
+\paragraph{Train/Test Split}
+
+For each wine type (red and white), I split the data into training and testing sets using an 80/20 split with stratification to preserve class balance:
+
+\begin{itemize}
+    \item \textbf{Red Wine}: 1,279 training samples, 320 test samples
+    \item \textbf{White Wine (before downsampling)}: 3,918 training samples, 980 test samples
+\end{itemize}
+
+\paragraph{Downsampling White Wine Training Set}
+
+To ensure fair comparison between models trained on red and white wines, I downsampled the white wine training set to match the red wine training set size ($\sim$1,280 samples). Downsampling was performed using stratified sampling to maintain the class distribution (Good: 66.5\%, Bad: 33.5\%).
+
+\textbf{Final Training Set Sizes:}
+\begin{itemize}
+    \item Red Wine: 1,279 samples
+    \item White Wine (after downsampling): 1,278 samples
+\end{itemize}
+
+\paragraph{Feature Standardization}
+
+All 11 physicochemical features were standardized (mean = 0, standard deviation = 1) using separate StandardScaler instances for red and white wine training sets. This ensures that features with different scales contribute equally to model training and prevents numerical instability in gradient-based optimization.
+
+\subsubsection{Evaluation Strategy}
+
+Each model was evaluated under four conditions to assess both in-domain performance and cross-domain generalization:
+
+\paragraph{In-Domain Testing}
+Models trained and tested on the same wine type:
+\begin{itemize}
+    \item \textbf{Red $\rightarrow$ Red}: Train on red wine, test on red wine
+    \item \textbf{White $\rightarrow$ White}: Train on white wine, test on white wine
+\end{itemize}
+
+\paragraph{Cross-Domain Testing}
+Models trained on one wine type and tested on the other:
+\begin{itemize}
+    \item \textbf{Red $\rightarrow$ White}: Train on red wine, test on white wine
+    \item \textbf{White $\rightarrow$ Red}: Train on white wine, test on red wine
+\end{itemize}
+
+\paragraph{Performance Metrics}
+
+For each evaluation scenario, I reported three metrics:
+\begin{itemize}
+    \item \textbf{Accuracy}: Overall proportion of correct predictions
+    \item \textbf{Precision}: Proportion of predicted ``Good'' wines that are actually good
+    \item \textbf{Recall}: Proportion of actual ``Good'' wines correctly identified
+\end{itemize}
+
+\subsubsection{Results}
+
+Table \ref{tab:task2_partb_results} summarizes the performance of both models across all evaluation conditions.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+\textbf{Model} & \textbf{Train On} & \textbf{Test On} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} \\
+\hline
+\multicolumn{6}{|c|}{\textbf{In-Domain Testing}} \\
+\hline
+Logistic Regression & Red & Red & 74.1\% & 76.8\% & 73.7\% \\
+Neural Network & Red & Red & 70.3\% & 77.9\% & 62.0\% \\
+\hline
+Logistic Regression & White & White & 74.1\% & 76.5\% & 88.0\% \\
+Neural Network & White & White & \textbf{75.4\%} & 77.5\% & 88.8\% \\
+\hline
+\multicolumn{6}{|c|}{\textbf{Cross-Domain Testing}} \\
+\hline
+Logistic Regression & Red & White & \textbf{64.9\%} & 83.6\% & 58.7\% \\
+Neural Network & Red & White & 63.9\% & 82.5\% & 58.0\% \\
+\hline
+Logistic Regression & White & Red & \textbf{63.8\%} & 92.3\% & 35.1\% \\
+Neural Network & White & Red & 55.6\% & 85.4\% & 20.5\% \\
+\hline
+\end{tabular}
+\caption{Performance comparison of Logistic Regression and Neural Network across in-domain and cross-domain testing scenarios. Bold values indicate the best performance for each test condition.}
+\label{tab:task2_partb_results}
+\end{table}
+
+
+
+\subsection{Part C: Analysis and Interpretation}
+
+In this part, I interpret and compare the model results from Part B, analyzing performance consistency, generalization capability, and factors affecting cross-domain transfer.
+
+\subsubsection{Visualization}
+
+Figure \ref{fig:task2_partc_analysis} presents a comprehensive analysis of model performance across all evaluation scenarios, including performance comparison, degradation analysis, precision-recall trade-offs, consistency metrics, and a performance heatmap.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{task2_part_c_analysis.png}
+    \caption{Task 2 Part C: Comprehensive model performance analysis. \textbf{Top}: Overall accuracy comparison across scenarios with in-domain/cross-domain distinction. \textbf{Middle Left}: Cross-domain performance degradation. \textbf{Middle Right}: Precision-recall trade-off analysis. \textbf{Bottom Left}: Model consistency with variance. \textbf{Bottom Right}: Performance metrics heatmap.}
+    \label{fig:task2_partc_analysis}
+\end{figure}
+
+\subsubsection{Question 1: In-Domain Consistency and Overfitting}
+
+\textbf{Which model demonstrated more consistent in-domain performance? Did you observe any signs of overfitting?}
+
+Logistic Regression demonstrated superior consistency across in-domain settings, achieving exactly 74.1\% accuracy on both red and white wines (standard deviation = 0.0\%). In contrast, Neural Network showed more variability (mean = 72.9\%, std = 2.5\%), performing worse on red wine (70.3\%) but slightly better on white wine (75.4\%). This variance suggests the Neural Network is sensitive to dataset-specific characteristics, a sign of overfitting. The Neural Network's poor cross-domain performance (especially White$\rightarrow$Red at 55.6\%) compared to its in-domain performance confirms overfitting to wine-type-specific patterns rather than learning generalizable quality indicators.
+
+\subsubsection{Question 2: Cross-Domain Generalization}
+
+\textbf{Which model generalized better across wine types? How much did performance degrade?}
+
+Logistic Regression generalized significantly better across wine types, maintaining a mean cross-domain accuracy of 64.3\% (Red$\rightarrow$White: 64.9\%, White$\rightarrow$Red: 63.8\%) with minimal variance (std = 0.6\%). Neural Network achieved only 59.8\% mean cross-domain accuracy with high variance (std = 4.1\%). Performance degradation: Logistic Regression experienced consistent drops of 9.2\% and 10.3\%, while Neural Network showed asymmetric degradation---6.4\% for Red$\rightarrow$White but a severe 19.8\% drop for White$\rightarrow$Red. The Neural Network's failure to generalize from white to red wine (recall = 20.5\%) demonstrates its over-reliance on wine-type-specific features.
+
+\subsubsection{Question 3: Factors Explaining Cross-Domain Differences}
+
+\textbf{What factors might explain the performance differences observed during cross-domain testing?}
+
+Three primary factors explain the cross-domain performance differences: \textbf{(1) Feature distribution shift}: Red and white wines have different physicochemical profiles (different acidity levels, sulfur dioxide concentrations, alcohol content). Models trained on one distribution struggle when feature values fall outside their training range. \textbf{(2) Model complexity and overfitting}: The Neural Network's higher capacity allowed it to memorize wine-type-specific patterns rather than learning universal quality indicators, while Logistic Regression's simplicity enforced learning of more generalizable linear relationships. \textbf{(3) Label imbalance}: White wines have 66.5\% ``good'' wines versus red's 53.5\%, causing models to learn different decision boundaries that transfer poorly across domains.
 
 \end{document}
