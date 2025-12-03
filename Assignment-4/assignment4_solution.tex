@@ -1,0 +1,405 @@
+\documentclass[11pt]{article}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{float}
+
+\title{CSDS 313/413: Introduction to Data Analysis \\ Assignment 4: Clustering and Dimensionality Reduction \\ Solutions}
+\author{Wiam Skakri}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Task 1: Clustering and Dimensionality Reduction}
+
+\subsection{Part A: Principal Component Analysis}
+
+\subsubsection{Question 1: Cumulative Variance Explained by Principal Components}
+
+\paragraph{Methodology}
+We applied Principal Component Analysis (PCA) to the congressional votes dataset (\texttt{p1\_congress\_1984\_votes.csv}), which contains voting records of 435 U.S. House of Representatives members on 16 key issues in 1984. 
+
+
+PCA was performed using \texttt{sklearn.decomposition.PCA} to identify the principal components that capture the maximum variance in the voting patterns.
+
+\paragraph{Results}
+
+Figure \ref{fig:pca_variance} shows the cumulative variance explained as a function of the number of principal components $k$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{pca_cumulative_variance.png}
+    \caption{Cumulative variance explained by top $k$ principal components. The red dashed line indicates 90\% variance threshold, and the green dashed line indicates 95\% variance threshold.}
+    \label{fig:pca_variance}
+\end{figure}
+
+\paragraph{Key Observations}
+\begin{itemize}
+    \item The first principal component (PC1) explains approximately 47\% of the total variance
+    \item The first two principal components together explain approximately 56\% of the variance
+    \item To reach 90\% cumulative variance, approximately \textbf{10 principal components} are required
+    \item To reach 95\% cumulative variance, approximately \textbf{12 principal components} are required
+\end{itemize}
+
+\textbf{Recommendation: 10-12 principal components are sufficient to summarize the data.}
+
+\paragraph{Interpretation}
+The PCA results suggest that while there is some correlation among the 16 votes (otherwise we would need all 16 components), the voting issues are sufficiently diverse that 10-12 dimensions are needed to adequately represent the voting patterns. This could indicate that the votes span multiple policy domains (economic, social, foreign policy, etc.) that are not perfectly aligned along a single ideological axis.
+
+\subsubsection{Question 2: Projection onto First 3 Principal Components}
+
+\paragraph{Methodology}
+We projected the 435 congress members onto the first 3 principal components and created scatter plots for three PC pairs: (PC1-PC2), (PC1-PC3), and (PC2-PC3). Each point represents a congress member, colored by party affiliation (Democrats in blue, Republicans in red).
+
+\paragraph{Variance Explained by First 3 Components}
+\begin{itemize}
+    \item PC1: 47.40\% of total variance
+    \item PC2: 8.84\% of total variance
+    \item PC3: 7.07\% of total variance
+
+\end{itemize}
+
+\paragraph{Results}
+
+Figure \ref{fig:pca_scatter} shows the three scatter plot pairs with party affiliation colors.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{pca_party_scatter_plots.png}
+    \caption{Scatter plots of congress members projected onto first 3 principal components, colored by party affiliation. Left: PC1 vs PC2, Middle: PC1 vs PC3, Right: PC2 vs PC3.}
+    \label{fig:pca_scatter}
+\end{figure}
+
+\paragraph{Quantitative Separation Analysis}
+
+To objectively compare the separation quality of each PC pair, we calculated separation scores based on the ratio of between-party distance to within-party variance:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{PC Pair} & \textbf{Centroid Distance} & \textbf{Avg Within-Party Variance} & \textbf{Separation Score} \\
+\hline
+PC1-PC2 & 4.350 & 1.749 & 3.289 \\
+PC1-PC3 & 4.324 & 1.632 & \textbf{3.385} \\
+PC2-PC3 & 0.672 & 1.064 & 0.651 \\
+\hline
+\end{tabular}
+\caption{Separation metrics for each principal component pair. Higher separation score indicates better party separation.}
+\end{table}
+
+
+
+
+
+\textbf{PC1-PC3 provides the best separation between parties (separation score: 3.385)}, followed closely by PC1-PC2 (3.289). PC2-PC3 shows poor separation (0.651).
+
+
+\textbf{Yes, congress members with the same party affiliation show clear clustering patterns.}
+
+\textbf{Evidence:}
+\begin{itemize}
+    \item \textbf{Visual clustering}: In both PC1-PC2 and PC1-PC3 plots, Democrats (blue) cluster on the right side, while Republicans (red) cluster on the left side
+    \item \textbf{Clear separation along PC1}: The primary axis of variation (PC1) strongly separates the two parties with minimal overlap in the center region
+
+\end{itemize}
+
+\subsection{Part B: Clustering Analysis}
+
+\paragraph{Methodology}
+
+We applied unsupervised clustering to group the 435 congress members into 2 clusters based solely on their voting patterns, without using party affiliation information.
+
+\paragraph{Clustering Algorithm: K-Means}
+
+We chose the K-Means clustering algorithm with the following specifications:
+
+\begin{itemize}
+    \item \textbf{Algorithm}: K-Means clustering
+    \item \textbf{Number of clusters (k)}: 2
+    \item \textbf{Distance metric}: Euclidean distance
+    \item \textbf{Random state}: 42 (for reproducibility)
+\end{itemize}
+
+\textbf{How K-Means Works:}
+\begin{enumerate}
+    \item Initialize 2 cluster centers using the k-means++ strategy
+    \item Assign each congress member to the nearest cluster center
+    \item Update cluster centers to be the mean (centroid) of all assigned members
+    \item Repeat steps 2-3 until convergence (cluster assignments no longer change)
+\end{enumerate}
+
+\textbf{Distance Function:}
+
+The Euclidean distance in 16-dimensional vote space:
+\begin{equation}
+d(\mathbf{x}, \mathbf{y}) = \sqrt{\sum_{i=1}^{16} (x_i - y_i)^2}
+\end{equation}
+
+where $\mathbf{x}$ and $\mathbf{y}$ are the voting vectors of two congress members across the 16 issues.
+
+\paragraph{Visualization}
+
+Figure \ref{fig:clustering} shows the clustering results visualized on the first two principal components (PC1-PC2), which explain 56.24\% of the total variance.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{clustering_vs_party.png}
+    \caption{Comparison of K-Means clustering results (left) vs actual party affiliations (right). Left: Unsupervised clustering result with Cluster 0 (purple) and Cluster 1 (orange), cluster centers marked with red X. Right: Ground truth party affiliations with Democrats (blue) and Republicans (red).}
+    \label{fig:clustering}
+\end{figure}
+
+\paragraph{Answer: Are the Groups Visually Separated?}
+
+\textbf{Yes, the two clusters are well-separated in the PC1-PC2 space.}
+
+\textbf{Quantitative evidence:}
+\begin{itemize}
+    \item \textbf{Distance between cluster centers}: 4.844 (in PC space)
+    \item \textbf{Average within-cluster spread}: 1.081
+    \item \textbf{Separation ratio}: 4.480
+\end{itemize}
+
+The separation ratio of 4.48 (well above 2.0) indicates that the clusters are clearly separated with minimal overlap. The cluster centers (marked with red X in the left plot) are positioned far apart relative to the spread of points within each cluster.
+
+\paragraph{Answer: Agreement with Party Affiliations}
+
+\textbf{The clustering shows strong agreement (88.3\%) with actual party affiliations.}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Party} & \textbf{Cluster 0} & \textbf{Cluster 1} & \textbf{Total} \\
+\hline
+Democrat & 8 & \textbf{160} & 168 \\
+Republican & \textbf{224} & 43 & 267 \\
+\hline
+\textbf{Total} & 232 & 203 & 435 \\
+\hline
+\end{tabular}
+\caption{Confusion matrix comparing clustering results with party affiliations. Bold numbers indicate correct cluster assignments.}
+\end{table}
+
+\textbf{Key findings:}
+\begin{itemize}
+    \item \textbf{Overall accuracy}: 88.3\% (384 out of 435 correctly clustered)
+    \item \textbf{Cluster 0 (purple)} predominantly contains Republicans: 224/232 = 96.6\%
+    \item \textbf{Cluster 1 (orange)} predominantly contains Democrats: 160/203 = 78.8\%
+    \item \textbf{Democrats}: 95.2\% correctly clustered (160/168)
+    \item \textbf{Republicans}: 83.9\% correctly clustered (224/267)
+
+\end{itemize}
+
+\subsubsection{Statistical Significance: Permutation Test}
+
+\paragraph{Methodology}
+
+To assess whether the clustering structure we found is statistically significant (rather than occurring by chance), we performed a permutation test with 1,000 iterations.
+
+\paragraph{Clustering Quality Score:}
+
+We used the \textbf{silhouette score} as our quality metric:
+\begin{itemize}
+    \item Measures how well-separated and compact clusters are
+    \item Range: -1 to 1, where higher values indicate better clustering
+    \item Calculated without using party labels (purely unsupervised metric)
+    \item Formula: $s = \frac{b - a}{\max(a, b)}$ where $a$ = mean intra-cluster distance, $b$ = mean nearest-cluster distance
+\end{itemize}
+
+\paragraph{Permutation Procedure}
+
+\begin{enumerate}
+    \item \textbf{Compute original score}: Apply K-means to real data, calculate silhouette score
+    \item \textbf{Generate null distribution}: For each of 1,000 permutations:
+    \begin{itemize}
+        \item Randomly shuffle each congress member's votes across the 16 issues
+        \item This destroys voting patterns while preserving vote distributions
+        \item Apply K-means clustering to permuted data
+        \item Calculate silhouette score
+    \end{itemize}
+    \item \textbf{Compare distributions}: Calculate p-value as the proportion of permuted scores $\geq$ original score
+\end{enumerate}
+
+\textbf{Null Hypothesis ($H_0$)}: The voting data has no inherent clustering structure; any observed clusters are due to random chance.
+
+\textbf{Alternative Hypothesis ($H_1$)}: The voting data contains real structure that produces meaningful clusters.
+
+\paragraph{Results}
+
+Figure \ref{fig:permutation} shows the distribution of clustering scores under the null hypothesis (permuted data) compared to the original score.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{permutation_test_results.png}
+    \caption{Permutation test results. Left: Histogram of silhouette scores from 1,000 permuted datasets (blue) compared to the original score (red dashed line). Right: Cumulative distribution function showing the original score at the 100th percentile.}
+    \label{fig:permutation}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Metric} & \textbf{Value} \\
+\hline
+Original silhouette score & 0.3536 \\
+Mean permuted score & 0.0622 \\
+Standard deviation (permuted) & 0.0016 \\
+Difference (original - mean permuted) & 0.2914 \\
+Z-score & 182.49 \\
+\hline
+\textbf{P-value} & \textbf{$<$ 0.001} \\
+
+\hline
+\end{tabular}
+\caption{Permutation test statistics comparing original clustering to null distribution.}
+\end{table}
+
+\paragraph{Answer: Is the Clustering Statistically Significant?}
+
+\textbf{Yes, the clustering is highly statistically significant (p $<$ 0.001).}
+
+\textbf{Evidence:}
+\begin{itemize}
+    \item \textbf{P-value $<$ 0.001}: Out of 1,000 permutations, zero achieved a score as high as the original (p = 0.0000)
+    \item \textbf{Extreme Z-score (182.49)}: The original score is more than 182 standard deviations above the mean of random data
+
+    \item \textbf{100th percentile}: The original score exceeds 100\% of permuted scores
+    \item \textbf{Clear visual separation}: The histogram shows complete separation between null distribution (centered at 0.06) and original score (0.35)
+\end{itemize}
+
+\textbf{Conclusion}: We reject the null hypothesis and conclude that the two-cluster structure in 1984 congressional voting data represents a statistically significant and substantively meaningful division that corresponds to party affiliation.
+
+\subsection{Part C: Clustering Comparison Analysis}
+
+\subsubsection{Task 1: Quantifying Agreement with Mutual Information}
+
+\paragraph{Methodology}
+
+To quantify the agreement between cluster membership and party affiliation, we use \textbf{mutual information (MI)} and its variants. Mutual information measures how much knowing one variable tells us about another.
+
+\paragraph{Mutual Information Metrics}
+
+We computed three related metrics:
+
+\begin{itemize}
+    \item \textbf{Mutual Information (MI)}: $MI(X;Y) = \sum_{x,y} P(x,y) \log \frac{P(x,y)}{P(x)P(y)}$
+    \begin{itemize}
+        \item Measures reduction in uncertainty about $Y$ when $X$ is known
+        \item Range: $[0, \min(H(X), H(Y))]$ where $H$ is entropy
+        \item Higher values indicate stronger association
+    \end{itemize}
+
+    \item \textbf{Normalized Mutual Information (NMI)}: $NMI(X;Y) = \frac{MI(X;Y)}{\sqrt{H(X) \cdot H(Y)}}$
+    \begin{itemize}
+        \item Normalized version of MI
+        \item Range: $[0, 1]$ where 1 = perfect agreement
+        \item Easier to interpret across different datasets
+    \end{itemize}
+
+    \item \textbf{Adjusted Mutual Information (AMI)}: Adjusted for chance
+    \begin{itemize}
+        \item Accounts for agreement expected by random chance
+        \item Range: $[0, 1]$ where 0 = random, 1 = perfect
+    \end{itemize}
+\end{itemize}
+
+\paragraph{Results for Clustering on All 16 Votes}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Metric} & \textbf{Value} \\
+\hline
+Mutual Information (MI) & 0.3461 \\
+Normalized MI (NMI) & 0.5097 \\
+Adjusted MI (AMI) & 0.5088 \\
+\hline
+\end{tabular}
+\caption{Mutual information metrics quantifying agreement between clusters (from all 16 votes) and party affiliations.}
+\end{table}
+
+\textbf{Interpretation}: NMI = 0.51 indicates strong agreement between clustering and party affiliation. Knowing which cluster a congress member belongs to substantially reduces uncertainty about their party affiliation.
+
+\subsubsection{Task 2: Comparison - Principal Components vs All Votes}
+
+\paragraph{Methodology}
+
+We compared two clustering approaches:
+\begin{enumerate}
+    \item \textbf{All 16 Votes}: K-means clustering on the full 16-dimensional vote space
+    \item \textbf{First 2 PCs}: K-means clustering on the 2-dimensional principal component space (PC1-PC2)
+\end{enumerate}
+
+Both used the same K-means parameters (k=2, random state=42, k-means++ initialization) for fair comparison.
+
+\paragraph{Results}
+
+Figure \ref{fig:part_c} shows the comparison between the two clustering approaches.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{part_c_comparison.png}
+    \caption{Comparison of clustering approaches. Top left: Clustering on all 16 votes (NMI = 0.5097). Top right: Clustering on first 2 PCs (NMI = 0.4851). Bottom left: Actual party affiliations. Bottom right: Agreement metrics comparison.}
+    \label{fig:part_c}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Metric} & \textbf{All 16 Votes} & \textbf{First 2 PCs} & \textbf{Difference} \\
+\hline
+MI & 0.3461 & 0.3290 & +0.0170 \\
+NMI & 0.5097 & 0.4851 & +0.0246 \\
+AMI & 0.5088 & 0.4842 & +0.0246 \\
+ARI & 0.5850 & 0.5709 & +0.0141 \\
+\hline
+\end{tabular}
+\caption{Comparison of agreement metrics between two clustering approaches. Positive differences indicate all 16 votes performs better.}
+\end{table}
+
+\paragraph{Answer: Which Clustering Agrees More with Party Affiliations?}
+
+\textbf{Clustering on all 16 votes agrees more with party affiliations (NMI = 0.5097) compared to clustering on first 2 PCs (NMI = 0.4851).}
+
+\textbf{Key findings:}
+\begin{itemize}
+    \item All 16 votes outperforms PC1-PC2 across all metrics (MI, NMI, AMI, ARI)
+    \item The difference is consistent but modest (2.46 percentage points in NMI)
+    \item Both approaches achieve reasonably high agreement ($>$ 0.48 NMI)
+\end{itemize}
+
+\paragraph{Interpretation: Why Does All 16 Votes Perform Better?}
+
+\textbf{Information retention}: The first 2 principal components capture only 56.24\% of the total variance, meaning 43.76\% of information is discarded. While PC1 strongly correlates with party (as shown in Part A), the missing dimensions contain additional party-discriminating information.
+
+\textbf{Multiple policy dimensions}: Party differences span multiple policy domains (economic, social, foreign policy). While PC1-PC2 captures the dominant axes of variation, the full 16-dimensional space represents these nuances more completely.
+
+\textbf{Detailed voting patterns}: Individual votes may capture specific party differences that are diluted or lost in the dimensionality reduction process. The full vote space preserves these fine-grained distinctions.
+
+\textbf{Trade-off between visualization and accuracy}:
+\begin{itemize}
+    \item \textbf{For visualization}: PC1-PC2 is superior (2D plots, still achieves 0.485 NMI)
+    \item \textbf{For clustering accuracy}: All 16 votes is superior (leverages all information, achieves 0.510 NMI)
+\end{itemize}
+
+\paragraph{Practical Implications}
+
+The modest difference (0.025 in NMI) between approaches suggests:
+\begin{enumerate}
+    \item PC1-PC2 captures the \textit{majority} of party-relevant information
+    \item The additional 14 dimensions provide incremental but meaningful improvement
+    \item For exploratory analysis and visualization, PC1-PC2 is sufficient
+    \item For maximizing classification accuracy, using all features is preferable
+\end{enumerate}
+
+This finding validates both the dimensionality reduction approach (most information is in PC1-PC2) and the value of retaining full feature space when accuracy is critical.
+
+\end{document}
